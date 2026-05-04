@@ -1,0 +1,1 @@
+select * from mycatalog.default.vend_table
