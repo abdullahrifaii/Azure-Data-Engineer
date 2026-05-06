@@ -1,1 +1,1 @@
-here are all the practices followed while learning databricks and pyspark
+here are all the pyspark used to practice and learn
