@@ -152,7 +152,8 @@ Converts columns into rows
 
 7️⃣ Does PySpark have direct unpivot?
 
-❌ No direct function
+yes as of a new version
+previously
 ✔ Use stack()
 
 # COMMAND ----------

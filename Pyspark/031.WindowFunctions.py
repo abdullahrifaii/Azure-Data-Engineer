@@ -1,10 +1,10 @@
 # Databricks notebook source
-# MAGIC %run /Workspace/PySpark/Utilities
+# MAGIC %run /Workspace/Users/aboudeh.rifaii@gmail.com/Azure-Data-Engineer/Pyspark/Utilities
 
 # COMMAND ----------
 
 df = read_csv_df(
-  "/Volumes/ADE202601/bronze/voldata/data/Employees_Wind.csv",
+  "/Volumes/mycatalog/default/myvolume/Databricks_Practice/employees_1.csv",
     infer_schema=True
 )
 display(df)

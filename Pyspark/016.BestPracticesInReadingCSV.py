@@ -42,14 +42,18 @@ def read_csv_df(
 
 # COMMAND ----------
 
-df = read_csv_df( "/Volumes/cdudevcatalog/bronze/datavol/Employees.csv")
+df = read_csv_df( "/Volumes/mycatalog/default/myvolume2/Orders.csv")
 display(df)
 
 
 # COMMAND ----------
 
+df.rdd.getNumPartitions()
+
+# COMMAND ----------
+
 df2 = read_csv_df(
-    "/Volumes/cdudevcatalog/bronze/datavol/Employees.csv",
+    "/Volumes/mycatalog/default/myvolume2/Orders.csv",
     infer_schema=True
 )
 
@@ -60,7 +64,7 @@ schema = "id INT, name STRING, age INT, country STRING, department STRING, salar
 
 
 df3 = read_csv_df(
-    "/Volumes/cdudevcatalog/bronze/datavol/Employees.csv",
+    "/Volumes/mycatalog/default/myvolume2/Orders.csv",
     infer_schema=True,
     schema=schema
 )

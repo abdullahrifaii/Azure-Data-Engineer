@@ -11,7 +11,7 @@ dbutils.fs.help("ls")
 
 # COMMAND ----------
 
-display(dbutils.fs.ls("/Volumes/ADE202601/bronze/voldata"))
+display(dbutils.fs.ls("/Volumes/mycatalog/default/myvolume/Databricks_Practice/"))
 
 # COMMAND ----------
 
@@ -19,7 +19,7 @@ display(dbutils.fs.ls("/Volumes/ADE202601/bronze/voldata/data"))
 
 # COMMAND ----------
 
-display(dbutils.fs.ls("/Volumes/ADE202601/bronze/voldata/data/Employees_Wind.csv"))
+display(dbutils.fs.ls("/Volumes/mycatalog/default/myvolume/Databricks_Practice/CustTransactions.csv"))
 
 # COMMAND ----------
 
@@ -27,7 +27,7 @@ dbutils.fs.help("mkdirs")
 
 # COMMAND ----------
 
-dbutils.fs.mkdirs("/Volumes/ade202601/bronze/voldata/myfolder")
+dbutils.fs.mkdirs("/Volumes/mycatalog/default/myvolume/myfolder")
 
 # COMMAND ----------
 

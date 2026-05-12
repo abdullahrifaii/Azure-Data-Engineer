@@ -10,12 +10,12 @@
 
 # COMMAND ----------
 
-# MAGIC %run /Workspace/PySpark/Utilities
+# MAGIC %run /Workspace/Users/aboudeh.rifaii@gmail.com/Azure-Data-Engineer/Pyspark/Utilities
 
 # COMMAND ----------
 
 df = read_csv_df(
-    "/Volumes/cdudevcatalog/bronze/datavol/Orders/Orders.csv",
+    "/Volumes/mycatalog/default/myvolume2/Orders.csv",
     infer_schema=True
 )
 display(df)
