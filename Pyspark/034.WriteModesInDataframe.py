@@ -15,7 +15,7 @@ help(df.write)
 
 # COMMAND ----------
 
-df.write.format("csv").option("path","/Volumes/mycatalog/default/myvolume/Output").save()
+df.write.format("csv").option("path","/Workspace/Users/aboudeh.rifaii@gmail.com/Azure-Data-Engineer/Pyspark").mode("overwrite").save()
 
 # COMMAND ----------
 
