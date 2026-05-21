@@ -38,7 +38,7 @@ display(df2)
 
 # COMMAND ----------
 
-mywin = Window.partitionBy("City").orderBy(col("Salary").desc())
+mywin = Window.partitionBy("Department").orderBy(col("Salary").desc())
 
 df2=df.withColumn("Rownum",row_number().over(mywin))
 display(df2)

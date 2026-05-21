@@ -1,9 +1,9 @@
 # Databricks notebook source
-# MAGIC %run /Workspace/PySpark/Utilities
+# MAGIC %run /Workspace/Users/aboudeh.rifaii@gmail.com/Azure-Data-Engineer/Pyspark/Utilities
 
 # COMMAND ----------
 
-df_trip=read_csv_df("/Volumes/cdudevcatalog/bronze/datavol/nyctaxi/")
+df_trip=read_csv_df("/Volumes/mycatalog/default/myvolume/Databricks_Practice/nyctaxi.csv")
 display(df_trip)
 
 # COMMAND ----------
@@ -12,7 +12,7 @@ df_trip.count()
 
 # COMMAND ----------
 
-df_location=read_csv_df("/Volumes/cdudevcatalog/bronze/datavol/nyctaxi/nyclocations.csv")
+df_location=read_csv_df("/Volumes/mycatalog/default/myvolume/Databricks_Practice/nyclocations.csv")
 display(df_location)
 
 # COMMAND ----------
@@ -82,6 +82,10 @@ df_sql = spark.sql("""SELECT * FROM {df_loc} l INNER JOIN {df_trip} t
 ON l.PUlocationID = t.PUlocationID
 """,df_loc=df_location,df_trip=df_trip)
 display(df_sql)
+
+# COMMAND ----------
+
+df_sql.spark.write.mode("overwrite").saveAsTable("nytaxi_join")
 
 # COMMAND ----------
 
