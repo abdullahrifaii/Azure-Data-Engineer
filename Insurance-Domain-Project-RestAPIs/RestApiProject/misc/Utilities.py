@@ -8,7 +8,7 @@ from pyspark.sql import Row
 
 # COMMAND ----------
 
-def fetch_rest_api_dataset(dataset_name, username="cduuser", password="Rest@1234", per_page=100,date_columns=None):
+def fetch_rest_api_dataset(dataset_name, username="cduuser", password="Rest@1234", per_page=10,date_columns=None):
     import base64
     """
     Fetches ALL pages of a WordPress REST dataset and returns a Spark DataFrame.
