@@ -21,7 +21,7 @@ except Exception as e:
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select count(*) from insureallbi.bronze.insurance_agents
+# MAGIC select * from insureallbi.bronze.insurance_agents limit 10
 
 # COMMAND ----------
 

@@ -75,6 +75,7 @@ def fetch_rest_api_dataset(dataset_name, username="cduuser", password="Rest@1234
         raise Exception(f"Unexpected API response: {first_response}")
 
     total_pages = first_response["total_pages"]
+    per_page = first_response["per_page"]
     print(f"Dataset: {dataset_name} → Total pages = {total_pages}")
 
     # ---- Loop through all pages ----
