@@ -63,7 +63,7 @@ def readEntity(manifest, entity):
     pyspark.sql.DataFrame
     """
 
-    base_path = "/Volumes/dataquality/bronze/dataquality/Datasets/"  # <-- change this to your real volume path
+    base_path = "/Volumes/dataquality/bronze/dataquality/Datasets/"  
 
     csv_path = f"{base_path}/{manifest}/{entity}.csv"
     json_path = f"{base_path}/{manifest}/{entity}.cdm.json"

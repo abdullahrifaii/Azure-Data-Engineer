@@ -22,7 +22,31 @@ salesorderlinedf= spark.table("bronze.salesorderline")
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC use catalog dataquality
+
+# COMMAND ----------
+
 # MAGIC %md ###Build Dimension/Fact table
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC CREATE OR REPLACE TABLE dataquality.bronze.promotable AS
+# MAGIC SELECT
+# MAGIC   CAST(PromotionId as INT),
+# MAGIC   LastProcessedChange_DateTime,
+# MAGIC   DataLakeModified_DateTime,
+# MAGIC   PromotionName,
+# MAGIC   PromoCode,
+# MAGIC   PromoType,
+# MAGIC   CAST(PromoPercentage AS DECIMAL(10,4)) AS PromoPercentage,
+# MAGIC   ValidFrom,
+# MAGIC   ValidTo,
+# MAGIC   CAST(IsActive AS INT) AS IsActive,
+# MAGIC   CAST(RecordId AS INT) AS RecordId
+# MAGIC FROM dataquality.bronze.promotable
 # MAGIC
 
 # COMMAND ----------
@@ -63,6 +87,29 @@ salesorderlinedf= spark.table("bronze.salesorderline")
 # MAGIC %sql
 # MAGIC
 # MAGIC select * from vwPromotable
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC CREATE OR REPLACE TABLE bronze.salesorderline AS
+# MAGIC SELECT
+# MAGIC   SalesOrderNumber,
+# MAGIC   LastProcessedChange_DateTime,
+# MAGIC   DataLakeModified_DateTime,
+# MAGIC   SalesOrderLine,
+# MAGIC   ItemId,
+# MAGIC   CAST(Qty AS INT) AS Qty,
+# MAGIC   CAST(Price AS DOUBLE) AS Price,
+# MAGIC   cast(VatPercentage as double) as VatPercentage,
+# MAGIC   CurrencyCode,
+# MAGIC   BookDate,
+# MAGIC   ShippedDate,
+# MAGIC   DeliveredDate,
+# MAGIC   TrackingNumber,
+# MAGIC   CustId,
+# MAGIC   PaymentTypeDesc,
+# MAGIC   RecordId
+# MAGIC FROM bronze.salesorderline
 
 # COMMAND ----------
 
@@ -124,6 +171,11 @@ display(factsalesorderlinedf)
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC select * from vwFactSalesOrderLine
+
+# COMMAND ----------
+
 # MAGIC %md ###Final dataframe
 # MAGIC
 
@@ -137,7 +189,7 @@ df_final = factsalesorderlinedf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

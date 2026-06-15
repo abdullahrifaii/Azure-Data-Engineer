@@ -17,18 +17,7 @@
 # ============================================
 
 df_fact_payments = spark.sql("""
-WITH payments_base AS (
-    SELECT 
-        customer_id,
-        policy_id,
-        payment_date,
-        payment_amount,
-        payment_frequency,
-        payment_mode,
-        payment_status,
-        transaction_id
-    FROM insureallasqlcatalog.ins.payments
-    UNION 
+WITH payments_base AS ( 
     SELECT 
         customer_id,
         policy_id,

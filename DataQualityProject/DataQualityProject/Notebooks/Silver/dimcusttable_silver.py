@@ -17,7 +17,7 @@ Entity = "dimcusttable"
 
 # COMMAND ----------
 
-custtablebronzedf= spark.table("bronze.custtable")
+custtablebronzedf= spark.table("dataquality.bronze.custtable")
 
 
 # COMMAND ----------
@@ -63,7 +63,7 @@ df_final = custtabledfdf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

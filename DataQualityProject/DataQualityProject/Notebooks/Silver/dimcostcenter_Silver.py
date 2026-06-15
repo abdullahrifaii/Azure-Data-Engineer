@@ -19,7 +19,6 @@ Entity = "dimcostcenter"
 
 costcenterDf= spark.table("bronze.CostCenter")
 
-
 # COMMAND ----------
 
 # MAGIC %md ###Build Dimension/Fact table
@@ -54,7 +53,13 @@ df_final = dimcostcenterDf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC use catalog dataquality;
+# MAGIC create schema silver;
 
 # COMMAND ----------
 

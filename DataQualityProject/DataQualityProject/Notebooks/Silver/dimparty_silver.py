@@ -17,8 +17,8 @@ Entity = "dimparty"
 
 # COMMAND ----------
 
-partiesDf= spark.table("bronze.parties")
-partyaddressDf = spark.table("bronze.partyaddress")
+partiesDf= spark.table("dataquality.bronze.parties")
+partyaddressDf = spark.table("dataquality.bronze.partyaddress")
 
 
 # COMMAND ----------
@@ -70,7 +70,7 @@ df_final = dimPartyDf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

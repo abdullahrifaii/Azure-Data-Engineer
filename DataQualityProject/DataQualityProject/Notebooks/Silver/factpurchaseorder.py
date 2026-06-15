@@ -12,13 +12,19 @@ Entity = "factpurchaseorder"
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC use catalog dataquality
+# MAGIC
+
+# COMMAND ----------
+
 # MAGIC %md ###Read Bronze tables
 # MAGIC
 
 # COMMAND ----------
 
 purchaseorderDf= spark.table("bronze.purchaseorder")
-dimcostcenterDf= spark.table("silver.dimcostcenter")
+dimcostcenterDf= spark.table("silver.dimcostcenter").withColumn("Vat",F.col("Vat").cast("numeric"))
 dimcurrencyDf= spark.table("silver.dimcurrency")
 
 # COMMAND ----------
@@ -41,8 +47,8 @@ factpurchaseorderDf = purchaseorderDf.filter(purchaseorderDf.RecordId.isNotNull(
         purchaseorderDf.PurchasePrice,
         purchaseorderDf.TotalOrder,
         purchaseorderDf.CostCenter.alias("CostCenterKey"),
-        dimcostcenterDf.Vat.alias("VatAmount"),
-        F.round((purchaseorderDf.TotalOrder + (purchaseorderDf.TotalOrder * dimcostcenterDf.Vat)),4).alias("TotalAmount"),
+        dimcostcenterDf.Vat.cast("double").alias("VatAmount"),
+        F.round((purchaseorderDf.TotalOrder + (purchaseorderDf.TotalOrder * dimcostcenterDf.Vat.cast("double"))),4).alias("TotalAmount"),
         purchaseorderDf.ExchangeRate,
         purchaseorderDf.Itemkey,
         dimcurrencyDf.CurrencyId.alias("CurrencyKey"),
@@ -77,7 +83,7 @@ df_final = factpurchaseorderDf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

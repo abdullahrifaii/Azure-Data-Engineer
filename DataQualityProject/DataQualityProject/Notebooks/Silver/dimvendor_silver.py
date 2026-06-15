@@ -17,7 +17,7 @@ Entity = "dimvendor"
 
 # COMMAND ----------
 
-vendorDf= spark.table("bronze.VendTable")
+vendorDf= spark.table("dataquality.bronze.VendTable")
 
 
 # COMMAND ----------
@@ -65,7 +65,15 @@ df_final = dimvendorDf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
+
+# COMMAND ----------
+
+from collections import Counter
+
+items = ['a', 'b', 'a', 'c']
+freq = Counter(items)
+print(freq)
 
 # COMMAND ----------
 

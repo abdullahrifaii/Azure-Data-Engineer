@@ -17,7 +17,7 @@ Entity = "dimcurrency"
 
 # COMMAND ----------
 
-currencyDf= spark.table("bronze.currency")
+currencyDf= spark.table("dataquality.bronze.currency")
 
 
 # COMMAND ----------
@@ -56,7 +56,7 @@ df_final = dimcurrencyDf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 
