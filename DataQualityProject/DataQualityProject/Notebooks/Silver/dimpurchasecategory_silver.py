@@ -17,7 +17,7 @@ Entity = "dimpurchasecategory"
 
 # COMMAND ----------
 
-purchaseCategoryDf= spark.table("bronze.purchcategory")
+purchaseCategoryDf= spark.table("dataquality.bronze.purchcategory")
 
 
 # COMMAND ----------
@@ -55,7 +55,7 @@ df_final = dimpurchaseCategoryDf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

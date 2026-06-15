@@ -17,6 +17,12 @@ Entity = "dimworker"
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC use catalog dataquality
+
+# COMMAND ----------
+
+
 workerdf= spark.table("bronze.workertable")
 verticaldf = spark.table("silver.dimvertical")
 
@@ -65,7 +71,7 @@ df_final = dimworkerdf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

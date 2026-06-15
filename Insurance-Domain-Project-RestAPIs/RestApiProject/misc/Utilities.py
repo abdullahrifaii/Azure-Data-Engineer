@@ -14,7 +14,7 @@ def fetch_rest_api_dataset(dataset_name, username="cduuser", password="Rest@1234
     Fetches ALL pages of a WordPress REST dataset and returns a Spark DataFrame.
     
     Args:
-        dataset_name (str): API dataset endpoint (e.g., insurance_claims)
+        datasetAC_name (str): API dataset endpoint (e.g., insurance_claims)
         username (str): Basic Auth username
         password (str): Basic Auth password
         per_page (int): Records per page (default 100)
@@ -351,3 +351,110 @@ def loadIncrementalData(df,schemaName, tableName, mergeKey):
 
         spark.sql(merge_sql,df=df)
             
+
+# COMMAND ----------
+
+# DBTITLE 1,Auto Loader for Bronze Layer Ingestion
+def autoload_to_bronze(
+    source_path,
+    schema_name,
+    table_name,
+    file_format="json",
+    checkpoint_location=None,
+    schema_hints=None,
+    merge_schema=True,
+    max_files_per_trigger=1000
+):
+    """
+    Auto Loader function to incrementally load data from cloud storage to bronze layer.
+    
+    Args:
+        source_path (str): Cloud storage path (e.g., 's3://bucket/path/', '/Volumes/catalog/schema/volume/')
+        schema_name (str): Target schema name in insureallBI catalog
+        table_name (str): Target table name
+        file_format (str): Source file format - 'json', 'csv', 'parquet', 'avro', 'orc', 'text', 'binaryFile'
+        checkpoint_location (str): Optional custom checkpoint location. Defaults to table's _checkpoints path
+        schema_hints (dict): Optional schema hints as {"col_name": "data_type"}
+        merge_schema (bool): Enable schema evolution (default True)
+        max_files_per_trigger (int): Max files to process per trigger (default 1000)
+    
+    Returns:
+        StreamingQuery object
+        
+    Example:
+        autoload_to_bronze(
+            source_path="s3://my-bucket/data/claims/",
+            schema_name="bronze",
+            table_name="insurance_claims_raw",
+            file_format="json"
+        )
+    """
+    
+    # Set default checkpoint location
+    if checkpoint_location is None:
+        checkpoint_location = f"/tmp/checkpoints/insureallBI/{schema_name}/{table_name}"
+    
+    full_table_name = f"insureallBI.{schema_name}.{table_name}"
+    
+    print(f"🔄 Starting Auto Loader for {full_table_name}")
+    print(f"📂 Source: {source_path}")
+    print(f"📝 Format: {file_format}")
+    print(f"✅ Checkpoint: {checkpoint_location}")
+    
+    # Build cloudFiles options
+    read_options = {
+        "cloudFiles.format": file_format,
+        "cloudFiles.schemaLocation": checkpoint_location,
+        "cloudFiles.inferColumnTypes": "true",
+        "cloudFiles.schemaEvolutionMode": "addNewColumns" if merge_schema else "none",
+        "cloudFiles.maxFilesPerTrigger": str(max_files_per_trigger)
+    }
+    
+    # Add format-specific options
+    if file_format == "csv":
+        read_options.update({
+            "header": "true",
+            "inferSchema": "true",
+            "cloudFiles.inferColumnTypes": "true"
+        })
+    elif file_format == "json":
+        read_options["multiLine"] = "true"
+    
+    # Apply schema hints if provided
+    if schema_hints:
+        hints_str = ",".join([f"{col} {dtype}" for col, dtype in schema_hints.items()])
+        read_options["cloudFiles.schemaHints"] = hints_str
+    
+    # Read stream using Auto Loader
+    df_stream = spark.readStream \
+        .format("cloudFiles") \
+        .options(**read_options) \
+        .load(source_path)
+    
+    # Add metadata columns for tracking
+    df_stream = df_stream \
+        .withColumn("_ingestion_timestamp", current_timestamp()) \
+        .withColumn("_source_file", col("_metadata.file_path")) \
+        .withColumn("_source_file_modification_time", col("_metadata.file_modification_time"))
+    
+    # Write to bronze Delta table
+    query = df_stream.writeStream \
+        .format("delta") \
+        .outputMode("append") \
+        .option("checkpointLocation", checkpoint_location) \
+        .option("mergeSchema", "true" if merge_schema else "false") \
+        .trigger(availableNow=True) \
+        .toTable(full_table_name)
+    
+    # Wait for completion
+    query.awaitTermination()
+    
+    print(f"✅ Auto Loader completed for {full_table_name}")
+    
+    # Log success
+    try:
+        log_pipeline_status(schema_name, table_name, "Auto Loader completed successfully")
+    except Exception as log_error:
+        print(f"⚠️ Logging failed: {log_error}")
+    
+    return query

@@ -12,7 +12,7 @@
 # COMMAND ----------
 
 Entity = "VendTable"
-EntityPath = f"Purchase/{Entity}/"
+manifest = "Purchase"
 
 # COMMAND ----------
 
@@ -20,7 +20,7 @@ EntityPath = f"Purchase/{Entity}/"
 
 # COMMAND ----------
 
-partyAddressdf = readFromDeltaPath(EntityPath)
+partyAddressdf = readEntity(manifest, Entity)
 display(partyAddressdf)
 
 
@@ -30,7 +30,7 @@ display(partyAddressdf)
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(partyAddressdf,"Bronze",Entity)
+saveDeltaTableToCatalog(partyAddressdf,"dataquality","Bronze",Entity)
 
 # COMMAND ----------
 

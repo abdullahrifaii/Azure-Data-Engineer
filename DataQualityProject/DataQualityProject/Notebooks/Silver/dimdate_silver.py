@@ -17,7 +17,7 @@ Entity = "dimdate"
 
 # COMMAND ----------
 
-fiscalperioddf = spark.table("bronze.fiscalperiod")
+fiscalperioddf = spark.table("dataquality.bronze.fiscalperiod")
 
 # COMMAND ----------
 
@@ -106,7 +106,7 @@ df_final = datedimdf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

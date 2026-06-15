@@ -17,7 +17,7 @@ Entity = "dimpaymenttypes"
 
 # COMMAND ----------
 
-salesorderlinedf= spark.table("bronze.salesorderline")
+salesorderlinedf= spark.table("dataquality.bronze.salesorderline")
 display(salesorderlinedf)
 
 
@@ -29,7 +29,7 @@ display(salesorderlinedf)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC CREATE TABLE IF NOT EXISTS silver.dimpaymenttypes(
+# MAGIC CREATE TABLE IF NOT EXISTS dataquality.silver.dimpaymenttypes(
 # MAGIC   PaymentTypeId INT,
 # MAGIC   PaymentTypeDesc STRING
 # MAGIC )
@@ -46,7 +46,7 @@ display(df)
 
 # COMMAND ----------
 
-paymenttypedf = spark.table("silver.dimpaymenttypes")
+paymenttypedf = spark.table("dataquality.silver.dimpaymenttypes")
 display(paymenttypedf)
 
 # COMMAND ----------
@@ -78,7 +78,7 @@ display(idsFinal)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select  * from silver.dimpaymenttypes
+# MAGIC select  * from dataquality.silver.dimpaymenttypes
 
 # COMMAND ----------
 
@@ -91,16 +91,16 @@ df_final = idsFinal
 
 # COMMAND ----------
 
+df_final.write.format("delta").mode("append").saveAsTable("dataquality.silver.dimpaymenttypes")
+
+# COMMAND ----------
+
 # MAGIC %md ## Write to Silver Schema
 
 # COMMAND ----------
 
-appendToDeltaTable(df_final,"silver",Entity)
-
-# COMMAND ----------
-
 # MAGIC %sql
-# MAGIC select  * from silver.dimpaymenttypes
+# MAGIC select  * from dataquality.silver.dimpaymenttypes
 
 # COMMAND ----------
 

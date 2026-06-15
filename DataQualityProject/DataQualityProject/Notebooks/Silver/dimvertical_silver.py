@@ -17,8 +17,13 @@ Entity = "dimvertical"
 
 # COMMAND ----------
 
-workerdf= spark.table("bronze.workertable")
+workerdf= spark.table("dataquality.bronze.workertable")
 
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC use catalog dataquality
 
 # COMMAND ----------
 
@@ -35,6 +40,7 @@ workerdf= spark.table("bronze.workertable")
 
 # COMMAND ----------
 
+from pyspark.sql import functions as F
 df = workerdf.select(F.expr("trim(Vertical) AS Vertical")).distinct()
 display(df)
 
@@ -68,4 +74,6 @@ display(spark.table("silver.dimvertical"))
 
 # COMMAND ----------
 
-
+from pyspark.sql import functions as F
+dff = workerdf.filter(workerdf.Vertical.isNotNull()).select(F.expr("trim(Vertical) AS Vertical")).distinct()
+display(dff)

@@ -17,7 +17,7 @@ Entity = "dimpromotable"
 
 # COMMAND ----------
 
-promotablebronzedf= spark.table("bronze.promotable")
+promotablebronzedf= spark.table("dataquality.bronze.promotable")
 
 
 # COMMAND ----------
@@ -60,7 +60,7 @@ df_final = promotabledf
 
 # COMMAND ----------
 
-saveDeltaTableToCatalog(df_final,"silver",Entity)
+saveDeltaTableToCatalog(df_final,"dataquality","silver",Entity)
 
 # COMMAND ----------
 

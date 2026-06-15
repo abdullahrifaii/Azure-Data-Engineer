@@ -4,6 +4,11 @@
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC use catalog `insureallbi`; select * from `bronze`.`insurance_customers` limit 100;
+
+# COMMAND ----------
+
 # DBTITLE 1,Set Catalog
 # MAGIC %sql
 # MAGIC USE CATALOG insureallBI

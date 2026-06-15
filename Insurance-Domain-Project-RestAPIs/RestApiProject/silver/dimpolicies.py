@@ -6,7 +6,7 @@
 
 # DBTITLE 1,Set Catalog
 # MAGIC %sql
-# MAGIC USE CATALOG bronze.insurance_policies
+# MAGIC USE CATALOG insureallbi
 
 # COMMAND ----------
 

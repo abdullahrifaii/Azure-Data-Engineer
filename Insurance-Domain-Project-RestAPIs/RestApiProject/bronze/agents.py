@@ -21,8 +21,23 @@ except Exception as e:
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select * from insureallbi.bronze.insurance_agents limit 10
+# MAGIC select count(*) from insureallbi.bronze.insurance_agents
 
 # COMMAND ----------
 
+import dlt
 
+@dlt.table(name="insurance_agents_bronze")
+def bronze():
+    return fetch_rest_api_dataset(
+        "insurance_agents",
+        date_columns=["date_of_joining"]
+    )
+
+
+@dlt.table(name="insurance_agents_silver")
+def silver():
+    return (
+        dlt.read("insurance_agents_bronze")
+        .dropDuplicates(["agent_id"])
+    )
